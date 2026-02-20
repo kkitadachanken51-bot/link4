@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>椿山ピアノサロン | レッスン & レンタルサロン</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Serif JP (明朝体) & Cormorant Garamond (英語用見出し) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2C3539', // 深いチャコールグレー
+                        secondary: '#B89B5E', // 上品なゴールド/真鍮色
+                        base: '#FBFBFB', // ほんのり温かみのある白
+                        surface: '#F4F2F0', // 薄いベージュグレー
+                        textMain: '#333333'
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Serif JP"', 'serif'],
+                        serif: ['"Noto Serif JP"', 'serif'],
+                        english: ['"Cormorant Garamond"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FBFBFB;
+            color: #333333;
+            font-family: 'Noto Serif JP', serif;
+        }
+        /* スクロールアニメーション用 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* セクションタイトル装飾 */
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 1px;
+            background-color: #B89B5E;
+            margin: 1rem auto 0;
+        }
+        /* パララックス風画像 */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-secondary selection:text-white">
+
+    <!-- ナビゲーションバー -->
+    <header class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 border-b border-gray-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <div class="flex-shrink-0 flex flex-col items-start cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="font-english text-xl tracking-[0.2em] text-secondary mb-1">TSUBAKIYAMA</span>
+                    <span class="font-medium text-lg tracking-widest text-primary">椿山ピアノサロン</span>
+                </div>
+                
+                <!-- PCメニュー -->
+                <nav class="hidden lg:flex space-x-10 items-center">
+                    <a href="#about" class="text-sm tracking-widest text-textMain hover:text-secondary transition duration-300">ABOUT</a>
+                    <a href="#lesson" class="text-sm tracking-widest text-textMain hover:text-secondary transition duration-300">LESSON</a>
+                    <a href="#profile" class="text-sm tracking-widest text-textMain hover:text-secondary transition duration-300">PROFILE</a>
+                    <a href="#rental" class="text-sm tracking-widest text-textMain hover:text-secondary transition duration-300">RENTAL</a>
+                    <a href="#access" class="text-sm tracking-widest text-textMain hover:text-secondary transition duration-300">ACCESS</a>
+                    <a href="#contact" class="border border-secondary text-secondary hover:bg-secondary hover:text-white px-8 py-3 text-sm tracking-widest transition duration-300 flex items-center gap-2">
+                        お問い合わせ
+                    </a>
+                </nav>
+
+                <!-- モバイルメニューボタン -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-primary hover:text-secondary focus:outline-none">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- モバイルメニュー -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-6 pt-4 pb-8 space-y-4 text-center">
+                <a href="#about" class="block py-3 text-sm tracking-widest text-textMain border-b border-gray-50">ABOUT / コンセプト</a>
+                <a href="#lesson" class="block py-3 text-sm tracking-widest text-textMain border-b border-gray-50">LESSON / レッスン・料金</a>
+                <a href="#profile" class="block py-3 text-sm tracking-widest text-textMain border-b border-gray-50">PROFILE / 講師紹介</a>
+                <a href="#rental" class="block py-3 text-sm tracking-widest text-textMain border-b border-gray-50">RENTAL / レンタルサロン</a>
+                <a href="#access" class="block py-3 text-sm tracking-widest text-textMain border-b border-gray-50">ACCESS / アクセス</a>
+                <a href="#contact" class="block py-4 mt-6 text-sm tracking-widest bg-secondary text-white border border-secondary">お問い合わせ</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+        <!-- 背景画像 (少し暗くしてテキストを目立たせる) -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&q=80&w=2000" alt="コンサートホールとグランドピアノ" class="w-full h-full object-cover object-center filter brightness-50">
+        </div>
+
+        <div class="relative z-10 text-center px-4 fade-in">
+            <p class="font-english text-secondary text-xl md:text-2xl tracking-[0.3em] mb-6 italic">Lesson & Rental Salon</p>
+            <h1 class="text-3xl md:text-5xl lg:text-6xl text-white font-light tracking-[0.1em] leading-relaxed mb-8 text-shadow">
+                最高音響設計の空間で<br>
+                音楽と出会う
+            </h1>
+            <p class="text-gray-200 text-sm md:text-base tracking-widest leading-loose">
+                埼玉県蓮田市・椿山<br>
+                響き豊かなサロンホールを備えたピアノ教室
+            </p>
+        </div>
+        
+        <!-- スクロールダウンインジケーター -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center animate-bounce">
+            <span class="text-white/70 font-english text-xs tracking-widest mb-2">SCROLL</span>
+            <i data-lucide="chevron-down" class="text-white/70 w-5 h-5"></i>
+        </div>
+    </section>
+
+    <!-- コンセプト (About) -->
+    <section id="about" class="py-24 md:py-32 bg-base">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 fade-in">
+                <h2 class="font-english text-4xl text-primary tracking-widest mb-3 section-title">About</h2>
+                <p class="text-sm tracking-widest text-gray-500 mt-6">サロンについて</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="md:w-1/2 fade-in">
+                    <img src="https://images.unsplash.com/photo-1550478065-226e6de3bb70?auto=format&fit=crop&q=80&w=800" alt="ピアノを弾く様子" class="w-full h-auto shadow-xl">
+                </div>
+                <div class="md:w-1/2 fade-in" style="transition-delay: 0.2s;">
+                    <h3 class="text-2xl font-medium text-primary mb-8 leading-relaxed tracking-wider">
+                        プロがこだわる<br>上質な音の響き
+                    </h3>
+                    <div class="space-y-6 text-gray-600 leading-loose text-sm md:text-base tracking-wide">
+                        <p>
+                            椿山ピアノサロンは、コンサート向けに設計された響き豊かなサロンホールと、複数のレッスン室を備えた音楽空間です。
+                        </p>
+                        <p>
+                            4歳のお子様から大人の方まで、ピアノおよびフルートの個人レッスンを行っています。初心者の方から、音大受験を目指す方まで幅広く対応いたします。
+                        </p>
+                        <p>
+                            「人前で演奏したい」「ミニコンサートを開きたい」という方のために、ホールやレッスン室のレンタルも行っており、地域の皆様に愛される音楽の拠点を目指しています。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- レッスン (Lesson) -->
+    <section id="lesson" class="py-24 md:py-32 bg-surface">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 fade-in">
+                <h2 class="font-english text-4xl text-primary tracking-widest mb-3 section-title">Lesson</h2>
+                <p class="text-sm tracking-widest text-gray-500 mt-6">レッスンのご案内</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
+                <!-- ピアノコース -->
+                <div class="bg-white p-10 shadow-sm fade-in">
+                    <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+                        <i data-lucide="music" class="w-8 h-8 text-secondary"></i>
+                        <h3 class="text-2xl font-medium tracking-widest">ピアノコース</h3>
+                    </div>
+                    <p class="text-gray-600 mb-8 leading-loose text-sm">
+                        事前に丁寧なカウンセリングを行い、一人ひとりの目的やレベルに合ったレッスン内容をご提案します。お子様の情操教育から、大人の趣味、専門的な技術習得まで丁寧に指導いたします。
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-3 border-b border-dashed border-gray-200">
+                            <span class="tracking-widest">30分コース</span>
+                            <span class="font-bold text-lg">7,480円<span class="text-xs font-normal text-gray-500 ml-1">/月(税込)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-dashed border-gray-200">
+                            <span class="tracking-widest">40分コース</span>
+                            <span class="font-bold text-lg">8,690円<span class="text-xs font-normal text-gray-500 ml-1">/月(税込)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-dashed border-gray-200">
+                            <span class="tracking-widest">60分コース</span>
+                            <span class="font-bold text-lg">12,430円<span class="text-xs font-normal text-gray-500 ml-1">/月(税込)</span></span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4 text-right">※年間40回レッスン ＋ 発表会(年1回)</p>
+                    </div>
+                </div>
+
+                <!-- フルートコース -->
+                <div class="bg-white p-10 shadow-sm fade-in" style="transition-delay: 0.2s;">
+                    <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+                        <i data-lucide="wind" class="w-8 h-8 text-secondary"></i>
+                        <h3 class="text-2xl font-medium tracking-widest">フルートコース</h3>
+                    </div>
+                    <p class="text-gray-600 mb-8 leading-loose text-sm">
+                        美しい音色を奏でる喜びを。楽器の構え方や呼吸法といった基礎から、お好きな曲の演奏まで、プロのフルート奏者がマンツーマンで指導いたします。（楽器レンタル応相談）
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-3 border-b border-dashed border-gray-200">
+                            <span class="tracking-widest">30分コース</span>
+                            <span class="font-bold text-lg">7,480円<span class="text-xs font-normal text-gray-500 ml-1">/月(税込)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-dashed border-gray-200">
+                            <span class="tracking-widest">40分コース</span>
+                            <span class="font-bold text-lg">8,690円<span class="text-xs font-normal text-gray-500 ml-1">/月(税込)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-dashed border-gray-200">
+                            <span class="tracking-widest">60分コース</span>
+                            <span class="font-bold text-lg">12,430円<span class="text-xs font-normal text-gray-500 ml-1">/月(税込)</span></span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4 text-right">※年間40回レッスン</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 安心の料金体系 -->
+            <div class="max-w-3xl mx-auto text-center bg-white p-8 border border-secondary/30 fade-in">
+                <i data-lucide="check-circle" class="w-6 h-6 text-secondary mx-auto mb-4"></i>
+                <h4 class="text-lg font-medium tracking-widest mb-4">長く続けられる安心の料金体系</h4>
+                <p class="text-sm text-gray-600 leading-loose">
+                    お月謝が高すぎるレッスンは、長く続けていくには負担になります。<br>
+                    当サロンでは、レベルが上がっても、どれだけ長く通っていただいても、<br class="hidden md:block">
+                    コース規定の一定の金額以上になることはありません。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 講師紹介 (Profile) -->
+    <section id="profile" class="py-24 md:py-32 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 fade-in">
+                <h2 class="font-english text-4xl text-primary tracking-widest mb-3 section-title">Profile</h2>
+                <p class="text-sm tracking-widest text-gray-500 mt-6">講師紹介</p>
+            </div>
+
+            <div class="space-y-20">
+                <!-- ピアノ講師 -->
+                <div class="flex flex-col md:flex-row gap-12 items-center fade-in">
+                    <div class="md:w-2/5 flex-shrink-0">
+                        <div class="relative w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-8 border-surface shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600" alt="ピアノ講師" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
+                        </div>
+                    </div>
+                    <div class="md:w-3/5">
+                        <div class="mb-6 border-b border-gray-100 pb-4 text-center md:text-left">
+                            <span class="text-secondary text-sm tracking-widest block mb-2">ピアノ講師 / 代表</span>
+                            <h3 class="text-3xl font-medium tracking-widest text-primary mb-1">椿 香織</h3>
+                            <span class="font-english text-gray-400 tracking-[0.2em]">Kaori Tsubaki</span>
+                        </div>
+                        <p class="text-gray-600 leading-loose text-sm tracking-wide mb-6 text-justify">
+                            東京芸術大学音楽学部器楽科ピアノ専攻卒業。同大学院修士課程修了。在学中より国内外のコンクールで多数入賞。卒業後はヨーロッパ各地で研鑽を積み、帰国後はソリストとしての活動のほか、室内楽や後進の指導に精力的に取り組む。<br>
+                            「音楽は人生を豊かにする最高のパートナーです。確かな技術の習得はもちろん、音を奏でる喜びを一人でも多くの方にお伝えしたいと願っています。」
+                        </p>
+                        <ul class="text-xs text-gray-500 tracking-wider space-y-1 text-center md:text-left">
+                            <li>・全日本ピアノ指導者協会（PTNA）正会員</li>
+                            <li>・〇〇国際ピアノコンクール 審査員</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- フルート講師 -->
+                <div class="flex flex-col md:flex-row-reverse gap-12 items-center fade-in">
+                    <div class="md:w-2/5 flex-shrink-0">
+                        <div class="relative w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-8 border-surface shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600" alt="フルート講師" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
+                        </div>
+                    </div>
+                    <div class="md:w-3/5">
+                        <div class="mb-6 border-b border-gray-100 pb-4 text-center md:text-left">
+                            <span class="text-secondary text-sm tracking-widest block mb-2">フルート講師</span>
+                            <h3 class="text-3xl font-medium tracking-widest text-primary mb-1">蓮田 結衣</h3>
+                            <span class="font-english text-gray-400 tracking-[0.2em]">Yui Hasuda</span>
+                        </div>
+                        <p class="text-gray-600 leading-loose text-sm tracking-wide mb-6 text-justify">
+                            〇〇音楽大学音楽学部管楽器専攻卒業。読売新人演奏会に出演。オーケストラや吹奏楽のエキストラ奏者として多数の公演に参加するほか、木管アンサンブルのメンバーとして全国各地で訪問演奏を行う。<br>
+                            「フルートは自分の息がそのまま美しい音色に変わる、とても魅力的な楽器です。初めて楽器に触れる方から、部活動でのステップアップを目指す学生さんまで、楽しく丁寧にサポートいたします。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- レンタル (Rental) -->
+    <section id="rental" class="py-24 md:py-32 bg-base relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 fade-in">
+                <h2 class="font-english text-4xl text-primary tracking-widest mb-3 section-title">Rental Salon</h2>
+                <p class="text-sm tracking-widest text-gray-500 mt-6">レンタルサロン</p>
+            </div>
+
+            <div class="flex flex-col-reverse md:flex-row items-center gap-0 shadow-2xl fade-in">
+                <div class="md:w-1/2 bg-white p-12 lg:p-20">
+                    <h3 class="text-2xl font-medium text-primary mb-6 tracking-widest">響きを独り占めする贅沢</h3>
+                    <p class="text-gray-600 leading-loose mb-8 text-sm">
+                        発表会前のリハーサル、アンサンブルの練習、あるいはご自身のミニコンサートなど。優れた音響設計が施されたサロンホールと、グランドピアノを備えたレッスン室をお貸し出ししております。
+                    </p>
+                    <ul class="space-y-4 text-sm text-gray-700 tracking-wide mb-10">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mic2" class="w-4 h-4 text-secondary"></i>
+                            サロンホール（グランドピアノ・客席利用可）
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="door-open" class="w-4 h-4 text-secondary"></i>
+                            第1〜第3レッスン室（個人練習向け）
+                        </li>
+                    </ul>
+                    <a href="#contact" class="inline-block text-secondary border-b border-secondary pb-1 text-sm tracking-widest hover:opacity-70 transition">
+                        ご利用料金・空き状況のお問い合わせ
+                    </a>
+                </div>
+                <div class="md:w-1/2 h-64 md:h-auto self-stretch">
+                    <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&q=80&w=1000" alt="ホール客席" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- アクセス (Access) -->
+    <section id="access" class="py-24 md:py-32 bg-surface">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 fade-in">
+                <h2 class="font-english text-4xl text-primary tracking-widest mb-3 section-title">Access</h2>
+                <p class="text-sm tracking-widest text-gray-500 mt-6">アクセス</p>
+            </div>
+            
+            <div class="bg-white p-8 md:p-12 shadow-sm fade-in">
+                <div class="flex flex-col lg:flex-row gap-12 items-center">
+                    <div class="w-full lg:w-1/3">
+                        <div class="mb-8">
+                            <span class="font-english text-secondary tracking-[0.2em] text-sm block mb-2">LOCATION</span>
+                            <h3 class="text-2xl font-medium tracking-widest text-primary">椿山ピアノサロン</h3>
+                        </div>
+                        <ul class="space-y-6 text-gray-700 text-sm tracking-wide">
+                            <li class="flex items-start gap-4">
+                                <i data-lucide="map-pin" class="w-5 h-5 flex-shrink-0 text-secondary mt-0.5"></i>
+                                <div>
+                                    <span class="block mb-1">〒349-0143</span>
+                                    <span>埼玉県蓮田市椿山4-23-16</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <i data-lucide="car" class="w-5 h-5 flex-shrink-0 text-secondary mt-0.5"></i>
+                                <div>
+                                    <span class="block font-medium">駐車場完備</span>
+                                    <span class="text-gray-500 mt-1 block">専用駐車場を複数台分ご用意しております。お車でのお越しも安心です。</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="w-full lg:w-2/3 h-96">
+                        <iframe 
+                            src="https://maps.google.com/maps?q=埼玉県蓮田市椿山4-23-16&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition duration-500">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お問い合わせ (Contact) -->
+    <section id="contact" class="py-24 md:py-32 bg-primary text-white text-center relative parallax-bg" style="background-image: linear-gradient(rgba(44, 53, 57, 0.9), rgba(44, 53, 57, 0.9)), url('https://images.unsplash.com/photo-1514119412350-e174d90d280e?auto=format&fit=crop&q=80&w=2000');">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 fade-in">
+            <h2 class="font-english text-4xl tracking-widest mb-8">Contact</h2>
+            <p class="mb-12 text-gray-300 text-sm md:text-base leading-loose tracking-wider">
+                体験レッスンのお申し込み、レンタルサロンの空き状況など、<br class="hidden md:block">
+                お気軽にお問い合わせください。
+            </p>
+            
+            <div class="bg-white text-textMain p-8 md:p-12 max-w-xl mx-auto shadow-2xl">
+                <form class="space-y-6 text-left">
+                    <div>
+                        <label class="block text-xs tracking-widest mb-2 text-gray-500">お名前 <span class="text-red-500">*</span></label>
+                        <input type="text" class="w-full border-b border-gray-300 px-0 py-2 focus:outline-none focus:border-secondary transition bg-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs tracking-widest mb-2 text-gray-500">メールアドレス <span class="text-red-500">*</span></label>
+                        <input type="email" class="w-full border-b border-gray-300 px-0 py-2 focus:outline-none focus:border-secondary transition bg-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs tracking-widest mb-2 text-gray-500">お問い合わせ項目</label>
+                        <select class="w-full border-b border-gray-300 px-0 py-2 focus:outline-none focus:border-secondary transition bg-transparent text-gray-700">
+                            <option>体験レッスンのご予約</option>
+                            <option>コース・料金について</option>
+                            <option>レンタルサロンについて</option>
+                            <option>その他のお問い合わせ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs tracking-widest mb-2 text-gray-500">メッセージ</label>
+                        <textarea rows="4" class="w-full border-b border-gray-300 px-0 py-2 focus:outline-none focus:border-secondary transition bg-transparent resize-none"></textarea>
+                    </div>
+                    <button type="button" class="w-full bg-primary text-white font-medium tracking-widest text-sm py-4 mt-8 hover:bg-secondary transition duration-300">
+                        送信する
+                    </button>
+                </form>
+            </div>
+            
+            <div class="mt-16">
+                <p class="text-xs tracking-widest text-gray-400 mb-4">お電話でのお問い合わせ</p>
+                <a href="tel:0000000000" class="text-2xl md:text-3xl font-english tracking-widest hover:text-secondary transition">
+                    048-000-0000
+                </a>
+                <p class="text-xs mt-3 text-gray-400 tracking-wider">受付時間：10:00〜20:00（不定休）</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="bg-[#1A1A1A] text-gray-400 py-16 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-8 border-b border-gray-800 pb-12 mb-8">
+                <div class="text-center md:text-left">
+                    <span class="font-english text-lg tracking-[0.2em] text-secondary mb-1 block">TSUBAKIYAMA</span>
+                    <span class="font-medium text-base tracking-widest text-white">椿山ピアノサロン</span>
+                </div>
+                
+                <nav class="flex flex-wrap justify-center gap-6 text-xs tracking-widest">
+                    <a href="#about" class="hover:text-white transition">ABOUT</a>
+                    <a href="#lesson" class="hover:text-white transition">LESSON</a>
+                    <a href="#profile" class="hover:text-white transition">PROFILE</a>
+                    <a href="#rental" class="hover:text-white transition">RENTAL</a>
+                    <a href="#access" class="hover:text-white transition">ACCESS</a>
+                    <a href="#contact" class="hover:text-white transition">CONTACT</a>
+                </nav>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs tracking-widest">
+                <p>&copy; 2023 Tsubakiyama Piano Salon. All Rights Reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="#" class="hover:text-white transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- スクリプト類 -->
+    <script>
+        // Lucideアイコンの初期化
+        lucide.createIcons();
+
+        // モバイルメニューのトグル
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // モバイルメニューのリンクをクリックしたらメニューを閉じる
+        const mobileLinks = menu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // スクロールアニメーション (Fade In)
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        fadeElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // スムーススクロール (アンカーリンク)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    const headerHeight = 96;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
